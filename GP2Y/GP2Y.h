@@ -4,7 +4,7 @@ GP2y1014 give readout related to PM2.5
 
 to have "something" that is really related to PM and not to dust, some filtering and cycles of sampels must be done
 
-to be honest a common readout is near 30 to 50 ug/m3 of PM2.5  in fresh air of a small city away from traffic that is somewhat MORE than gravimetric measure
+to be honest a common readout is near 20 to 50 ug/m3 of PM2.5  in fresh air of a small city away from traffic that is somewhat MORE than gravimetric measure
 calibration must be done respect to a gravimetric PM measuremnt station. After compared measurements i noticed a value from 1 to 2 times the calibrate value from
 professional equipment.
 Anyway response tracking is good! 
@@ -110,13 +110,13 @@ float GP2Y:: readDust(){  //single cycle or reading
   if (ledMode){                                  //if positive logic control of IRLED
     digitalWrite(ledPowerPin,LOW); 
     delayMicroseconds(delayTime);
-    adc_vout=analogRead(dustPin); 
+    adc_vout=float(analogRead(dustPin)); 
     delayMicroseconds(delayTime2);
     digitalWrite(ledPowerPin,HIGH); 
     delayMicroseconds(offTime);
 
     dustRaw=adc_vout;
-    dustVal=(    ((kadc*5* (float)adc_vout)/1024 -0.2) * 171);   //pendenza= 171 [ug/mc V]  calcolata come 500/(3.5 volt- 0.6 volt)
+    dustVal=(    ((kadc*5*(adc_vout))/1024 -0.2) * 171);   //pendenza= 171 [ug/mc V]  calcolata come 500/(3.5 volt- 0.6 volt)
     return dustVal;
   } 
   else                                                   //if negative logic control of IRLED
@@ -128,7 +128,7 @@ float GP2Y:: readDust(){  //single cycle or reading
     delayMicroseconds(offTime);
 
     dustRaw=adc_vout;
-    dustVal=(    ((kadc*5*(float)(adc_vout))/1024 -0.2) * 171);   //slope= 171 [ug/mc V]  calculated (from datasheet) as  500/(3.5 volt- 0.6 volt)
+    dustVal=(    ((kadc*5*float(adc_vout))/102.4 -0.2) * 171);   //slope= 171 [ug/mc V]  calculated (from datasheet) as  500/(3.5 volt- 0.6 volt)
     return dustVal;
  }
 
